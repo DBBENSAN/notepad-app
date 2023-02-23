@@ -12,3 +12,28 @@ const readFromFile = () => {
 const writeToFile = (data) => {
    fs.writeFileSync('./db/db.json', JSON.stringify(data));
  };
+
+ // POST Route for creating a new note
+notes.post('/', (req, res) => {
+   console.log(req.body);
+ 
+   const newNote = req.body;
+ 
+   newNote.id = id++;
+   console.log(newNote);
+ 
+   const db = readFromFile();
+ 
+   db.push(newNote);
+ 
+   writeToFile(db);
+ 
+   res.json(db);
+ });
+
+ // GET Route for retrieving all notes
+notes.get('/', (req, res) => {
+   const db = readFromFile();
+   res.json(db);
+ });
+ 
