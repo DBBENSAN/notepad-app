@@ -1,4 +1,5 @@
-const notes = require('express').Router();
+const express = require('express');
+const router = express.Router();
 const fs = require('fs');
 const { v4: uuidv4 } = require('uuid');
 
@@ -8,13 +9,12 @@ const readFromFile = () => {
    const data = fs.readFileSync('./db/db.json', 'utf8');
    return JSON.parse(data);
 };
-
 const writeToFile = (data) => {
    fs.writeFileSync('./db/db.json', JSON.stringify(data));
 };
 
 // POST Route for creating a new note
-notes.post('/', (req, res) => {
+router.post('/', (req, res) => {
    console.log(req.body);
 
    const newNote = req.body;
@@ -25,28 +25,25 @@ notes.post('/', (req, res) => {
    const db = readFromFile();
 
    db.push(newNote);
-
    writeToFile(db);
-
    res.json(db);
 });
 
 // GET Route for retrieving all notes
-notes.get('/', (req, res) => {
+router.get('/', (req, res) => {
    const db = readFromFile();
    res.json(db);
 });
 
 // DELETE Route for deleting a note by id
-notes.delete('/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
    const db = readFromFile();
    const noteId = parseInt(req.params.id);
 
    const updatedDb = db.filter((note) => note.id !== noteId);
-
    writeToFile(updatedDb);
-
    res.json(updatedDb);
 });
 
-module.exports = notes;
+module.exports = router;
+
