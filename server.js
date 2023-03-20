@@ -1,14 +1,16 @@
 const express = require('express');
 const path = require('path');
-const api = require('./routes/index.js');
+const api = require('./routes/apiRoutes');
+
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/api', api);
 app.use(express.static('public'));
+
+app.use('/api/notes', api);
 
 app.get('/', (req, res) =>
   res.sendFile(path.join(__dirname, '/public/index.html'))
